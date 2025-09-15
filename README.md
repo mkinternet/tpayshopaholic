@@ -1,7 +1,6 @@
-# Integracja tpay dla shopaholic
+# Moduł  tpay dla Lovata Shopaholic
 
-Wtyczka integrująca bramkę tpay ze sklepem internetowym shopaholic dla Octobercms.
-
+Wtyczka integrująca bramkę tpay z modułem [Lovata Shopaholic](https://github.com/oc-shopaholic/oc-shopaholic-plugin) dla [Octobercms](https://github.com/octobercms/october) w wersji 2.x.
 
 ## Konfiguracja
 
@@ -18,10 +17,10 @@ W trybie edycji w zakładce bramka
 - zaznaczyć:  Wyślij zapytanie do bramki płatności podczas tworzenia zamówienia
 - podać id sprzedawcy, hasło sprzedawcy, klucz api, hasło api
 
-
+W ustawieniach przesyłki zaznaczyć dla których ma się wyświetlać płatność Tpay.
 
 
 ---
-© 2025
+
 
 Wykonane przez MK Internet.
