@@ -13,13 +13,8 @@ class Tpaypaymentstatus extends BasicNotificationHandler{
     public function __construct($userid, $userpassword)
     {
 		
-\Log::info($userid.' '.$userpassword);		
-		
-
         $this->merchantId = intVal($userid);
-	$this->merchantSecret = $userpassword;
-
-
+    	$this->merchantSecret = $userpassword;
 		
         parent::__construct();
     }

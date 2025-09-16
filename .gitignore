@@ -1,1 +1,2 @@
 deploy.bat
+vendor/tpay-com/tpay-php/src/Logs/*
