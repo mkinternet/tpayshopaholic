@@ -7,6 +7,7 @@ use System\Classes\PluginBase;
 
 use Mkinternet\Tpayshopaholic\Classes\ExtendPaymentMethodFields;
 use Mkinternet\Tpayshopaholic\Classes\PaymentMethodModel;
+use Mkinternet\Tpayshopaholic\Classes\PaymentGateway;
 
 /**
  * Tpayshopaholic Plugin Information File
@@ -44,6 +45,15 @@ class Plugin extends PluginBase
     {
         Event::subscribe(ExtendPaymentMethodFields::class);
         Event::subscribe(PaymentMethodModel::class);
+
+        Event::listen(PaymentGateway::EVENT_SUCCESS_URL, function ($obOrder) {
+            return Page::url('order-complete-page', ['slug' => $obOrder->secret_key]);
+        });
+
+        Event::listen(PaymentGateway::EVENT_FAIL_URL, function ($obOrder) {
+            return Page::url('order-failed-page', ['slug' => $obOrder->secret_key]);
+        });
+
     }
 
 

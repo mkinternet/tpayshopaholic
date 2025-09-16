@@ -18,9 +18,8 @@ class PaymentGateway extends AbstractPaymentGateway
     const SUCCESS_URL = '/mkinternet/tpayshopaholic/success';
     const FAIL_URL = '/mkinternet/tpayshopaholic/fail';
 
-    const EVENT_SUCCESS_URL = 'shopaholic.payment.sberbank.success.redirect_url';
-    const EVENT_FAIL_URL = 'shopaholic.payment.sberbank.fail.redirect_url';
-    const EVENT_GET_PAYMENT_GATEWAY_PURCHASE_DATA = 'shopaholic.payment.sberbank.purchase_data';
+    const EVENT_SUCCESS_URL = 'shopaholic.payment.tpay.success.redirect_url';
+    const EVENT_FAIL_URL = 'shopaholic.payment.tpay.fail.redirect_url';
 
     /** @var array - response from payment gateway */
     protected $arResponse = [];
