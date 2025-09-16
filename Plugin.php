@@ -2,6 +2,7 @@
 
 
 use Event;
+use Page;
 use System\Classes\PluginBase;
 
 
