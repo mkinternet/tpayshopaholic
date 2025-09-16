@@ -149,6 +149,7 @@ class PaymentGateway extends AbstractPaymentGateway
         return \Redirect::to(\Cms\Classes\Page::url('order-complete-page'));
     }
 
+
     /**
      * @param $sOrderKey
      * @return \Illuminate\Http\RedirectResponse
