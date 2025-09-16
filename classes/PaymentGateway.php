@@ -1,4 +1,6 @@
-<?php namespace Mkinternet\Tpayshopaholic\Classes;
+<?php
+
+namespace Mkinternet\Tpayshopaholic\Classes;
 
 use Response;
 
@@ -16,8 +18,9 @@ class PaymentGateway extends AbstractPaymentGateway
     const SUCCESS_URL = '/mkinternet/tpayshopaholic/success';
     const FAIL_URL = '/mkinternet/tpayshopaholic/fail';
 
-    const EVENT_SUCCESS_URL = 'Płatność powiodła się';
-    const EVENT_FAIL_URL = 'Płatność nie powiodła się';
+    const EVENT_SUCCESS_URL = 'shopaholic.payment.sberbank.success.redirect_url';
+    const EVENT_FAIL_URL = 'shopaholic.payment.sberbank.fail.redirect_url';
+    const EVENT_GET_PAYMENT_GATEWAY_PURCHASE_DATA = 'shopaholic.payment.sberbank.purchase_data';
 
     /** @var array - response from payment gateway */
     protected $arResponse = [];
@@ -32,7 +35,7 @@ class PaymentGateway extends AbstractPaymentGateway
      * Get response array
      * @return array
      */
-    public function getResponse() : array
+    public function getResponse(): array
     {
         return (array) $this->arResponse;
     }
@@ -41,7 +44,7 @@ class PaymentGateway extends AbstractPaymentGateway
      * Get redirect URL
      * @return string
      */
-    public function getRedirectURL() : string
+    public function getRedirectURL(): string
     {
         return $this->sRedirectURL;
     }
@@ -50,7 +53,7 @@ class PaymentGateway extends AbstractPaymentGateway
      * Get error message from payment gateway
      * @return string
      */
-    public function getMessage() : string
+    public function getMessage(): string
     {
         return $this->sMessage;
     }
@@ -61,11 +64,11 @@ class PaymentGateway extends AbstractPaymentGateway
 
         $order = \Lovata\OrdersShopaholic\Models\Order::getBySecretKey($trid)->first();
 
-        if(empty($order)){
+        if (empty($order)) {
             return 'Nieprawidłowy klucz';
         }
 
-        $html = '<h1>Za chwilę zostaniesz przekierowany na stronę płatności</h1>'.$order->payment_data;
+        $html = '<h1>Za chwilę zostaniesz przekierowany na stronę płatności</h1>' . $order->payment_data;
 
         return $html;
     }
@@ -75,74 +78,67 @@ class PaymentGateway extends AbstractPaymentGateway
     {
         $log = '';
 
-
-
-	$post = post();
+        $post = post();
 
         preg_match("/#([0-9-]+)/i", $post['tr_desc'], $order_number);
 
-	if(!empty($order_number)){
-	
-    
-	    $order = \Lovata\OrdersShopaholic\Models\Order::where('order_number',$order_number[1])->first();
-	    $this->initOrderObject($order->id);
+        if (!empty($order_number)) {
+
+
+            $order = \Lovata\OrdersShopaholic\Models\Order::where('order_number', $order_number[1])->first();
+            $this->initOrderObject($order->id);
 
 
             $notification = (new Tpaypaymentstatus(
-	        $this->getGatewayProperty('userid'),
-    	        $this->getGatewayProperty('userpassword')
-        	))->getTpayNotification();
+                $this->getGatewayProperty('userid'),
+                $this->getGatewayProperty('userpassword')
+            ))->getTpayNotification();
+        } else {
+            return false;
+        }
 
 
-	}else{
-	    return false;
-	}	
+        if (!empty($notification)) {
 
 
-        if(!empty($notification)){
-
-
-            if(!empty($order)){
+            if (!empty($order)) {
 
                 $order->transaction_id = $notification['tr_id'];
                 $order->save();
 
-                if($notification['tr_amount']==$notification['tr_paid']){
+                if ($notification['tr_amount'] == $notification['tr_paid']) {
 
 
-                    if($notification['tr_status'] == 'TRUE'){
-                        
+                    if ($notification['tr_status'] == 'TRUE') {
+
                         $this->setSuccessStatus();
-                        
-                        $log .= "Transaction success\n";	    
+
+                        $log .= "Transaction success\n";
                     }
-                    
-                    if($notification['tr_status'] == 'CHARGEBACK'){
-                        
-                        $this->setCancelStatus();				
-                        
-                        $log .= "Transaction  chargeback\n";	    
+
+                    if ($notification['tr_status'] == 'CHARGEBACK') {
+
+                        $this->setCancelStatus();
+
+                        $log .= "Transaction  chargeback\n";
                     }
-                    
-                }else{
-                    $log .= "tr_amound != tr_paid\n";	    
+                } else {
+                    $log .= "tr_amound != tr_paid\n";
                 }
 
                 $this->obOrder->payment_response = $notification;
                 $this->obOrder->payment_data = '';
-                $this->obOrder->save(); 
-
-            }else{
-                $log .= "Transaction ".$notification['tr_id']." not found\n";	    
-            }	
+                $this->obOrder->save();
+            } else {
+                $log .= "Transaction " . $notification['tr_id'] . " not found\n";
+            }
         }
 
-       
+
 
         $log .= print_r($notification, true);
-        
-        \Log::info($log);
 
+        \Log::info($log);
     }
 
     /**
@@ -171,10 +167,7 @@ class PaymentGateway extends AbstractPaymentGateway
     /**
      * Prepare data for request in payment gateway
      */
-    protected function preparePurchaseData()
-    {
-
-    }
+    protected function preparePurchaseData() {}
 
     /**
      * Validate request data
@@ -193,7 +186,7 @@ class PaymentGateway extends AbstractPaymentGateway
         $this->preparePurchaseData();
 
 
-		$paymentform = new Tpaypaymentapi(
+        $paymentform = new Tpaypaymentapi(
             $this->getGatewayProperty('userid'),
             $this->getGatewayProperty('userpassword'),
             $this->getGatewayProperty('apikey'),
@@ -205,21 +198,20 @@ class PaymentGateway extends AbstractPaymentGateway
 
         $paymentform->config = [
             'amount' => $this->obOrder->total_price_value,
-            'description' => '#'.$this->obOrder->order_number.' ',
+            'description' => '#' . $this->obOrder->order_number . ' ',
             'crc' => '100020003000',
-            'return_url' => url('/').self::SUCCESS_URL.'/'.$this->obOrder->secret_key,
-            'result_url' => url('/').self::NOTIFICATION_URL,
+            'return_url' => url('/') . self::SUCCESS_URL . '/' . $this->obOrder->secret_key,
+            'result_url' => url('/') . self::NOTIFICATION_URL,
             'result_email' => $this->getGatewayProperty('resultemail'),
             'email' => $this->obOrder->user->email,
-            'name' => $this->obOrder->user->name.' '.$this->obOrder->user->last_name,
+            'name' => $this->obOrder->user->name . ' ' . $this->obOrder->user->last_name,
             'group' => 150,
             'accept_tos' => 1,
-			
-        ];	
 
-       
+        ];
+
+
         $this->obResponse['htmlform'] = $paymentform->getTransactionFormApi();;
-
     }
 
     /**
@@ -232,13 +224,12 @@ class PaymentGateway extends AbstractPaymentGateway
             return;
         }
 
-        $this->sRedirectURL = url('/').self::FORM_URL.'/'.$this->obOrder->secret_key;
+        $this->sRedirectURL = url('/') . self::FORM_URL . '/' . $this->obOrder->secret_key;
         $this->bIsRedirect = true;
 
 
         $this->obOrder->payment_data = $this->obResponse['htmlform'];
         $this->obOrder->save();
-
     }
 
     /**
@@ -248,7 +239,4 @@ class PaymentGateway extends AbstractPaymentGateway
     {
         return Response::make('Access denied', 200);
     }
-
-
-
 }
