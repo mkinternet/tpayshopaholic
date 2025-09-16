@@ -49,18 +49,6 @@ class Plugin extends PluginBase
         Event::subscribe(ExtendPaymentMethodFields::class);
         Event::subscribe(PaymentMethodModel::class);
 
-        Event::listen(PaymentGateway::EVENT_SUCCESS_URL, function () {
-            //return Page::url('order-complete-page', ['slug' => $obOrder->secret_key]);
-            return \Redirect::to(\Cms\Classes\Page::url('order-complete-page'));
-        });
-
-        Event::listen(PaymentGateway::EVENT_FAIL_URL, function ($obOrder) {
-            return Page::url('order-failed-page', ['slug' => $obOrder->secret_key]);
-
-            return \Redirect::to(\Cms\Classes\Page::url('order-fail-page'));
-        });
-
-
         
     }
 

@@ -146,11 +146,7 @@ class PaymentGateway extends AbstractPaymentGateway
      */
     public function processSuccessURL($sOrderKey)
     {
-        $this->initOrderObject($sOrderKey);
-
         return \Redirect::to(\Cms\Classes\Page::url('order-complete-page'));
-
-//        return $this->returnRedirectResponse(self::EVENT_SUCCESS_URL);
     }
 
     /**
@@ -159,9 +155,6 @@ class PaymentGateway extends AbstractPaymentGateway
      */
     public function processFailURL($sOrderKey)
     {
-        $this->initOrderObject($sOrderKey);
-
-        //return $this->returnRedirectResponse(self::EVENT_FAIL_URL);
         return \Redirect::to(\Cms\Classes\Page::url('order-fail-page'));
     }
 
@@ -211,7 +204,7 @@ class PaymentGateway extends AbstractPaymentGateway
 
         ];
 
-        \Log::info(print_r($paymentform->config, true));
+        //\Log::info(print_r($paymentform->config, true));
         $this->obResponse['htmlform'] = $paymentform->getTransactionFormApi();;
     }
 
