@@ -19,6 +19,29 @@ W trybie edycji w zakładce bramka
 
 W ustawieniach przesyłki zaznaczyć dla których ma się wyświetlać płatność Tpay.
 
+Utworzyć podstrony:
+
+order-complete-page.html
+
+```
+title = "Zamówienie zostało złożone poprawnie"
+url = "/order-complete-page"
+layout = "subpage"
+is_hidden = 0
+robot_index = "index"
+robot_follow = "follow"
+```
+
+order-fail-page.html
+
+```
+title = "Zamówienie nie powiodło się"
+url = "/order-fail-page"
+layout = "subpage"
+is_hidden = 0
+robot_index = "index"
+robot_follow = "follow"
+```
 
 ---
 
