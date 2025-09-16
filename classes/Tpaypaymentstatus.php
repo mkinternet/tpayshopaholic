@@ -1,4 +1,4 @@
-<?php namespace SSI\Events\Classes;
+<?php namespace Mkinternet\Tpayshopaholic\Classes;
 
 /*
  * Created by tpay.com
@@ -13,11 +13,11 @@ class Tpaypaymentstatus extends BasicNotificationHandler{
     public function __construct($userid, $userpassword)
     {
 		
-		
+\Log::info($userid.' '.$userpassword);		
 		
 
         $this->merchantId = intVal($userid);
-		$this->merchantSecret = $userpassword;
+	$this->merchantSecret = $userpassword;
 
 
 		

@@ -19,8 +19,7 @@ Route::get(PaymentGateway::FORM_URL.'/{slug}', function ($trid) {
     return $paymentgateway->processFormRequest($trid);
 });
 
-Route::get(PaymentGateway::NOTIFICATION_URL, function () {
-
+Route::post(PaymentGateway::NOTIFICATION_URL, function () {
     $paymentgateway = new PaymentGateway();
     return $paymentgateway->processAnswerRequest();
 });

@@ -75,17 +75,32 @@ class PaymentGateway extends AbstractPaymentGateway
     {
         $log = '';
 
-        $notification = (new Tpaypaymentstatus(
-            $this->getGatewayProperty('userid'),
-            $this->getGatewayProperty('userpassword')
-            ))->getTpayNotification();	
+
+
+	$post = post();
+
+        preg_match("/#([0-9-]+)/i", $post['tr_desc'], $order_number);
+
+	if(!empty($order_number)){
+	
+    
+	    $order = \Lovata\OrdersShopaholic\Models\Order::where('order_number',$order_number[1])->first();
+	    $this->initOrderObject($order->id);
+
+
+            $notification = (new Tpaypaymentstatus(
+	        $this->getGatewayProperty('userid'),
+    	        $this->getGatewayProperty('userpassword')
+        	))->getTpayNotification();
+
+
+	}else{
+	    return false;
+	}	
+
 
         if(!empty($notification)){
 
-            preg_match("/#([0-9-]+)/i", $notification['tr_desc'], $order_number);
-
-            //$order = \Lovata\OrdersShopaholic\Models\Order::where('order_number',$order_number[1])->first();
-            $this->initOrderObject($order_number[1]);
 
             if(!empty($order)){
 
