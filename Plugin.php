@@ -2,7 +2,7 @@
 
 
 use Event;
-use Page;
+use Cms\Classes\Page;
 use System\Classes\PluginBase;
 
 
