@@ -211,7 +211,7 @@ class PaymentGateway extends AbstractPaymentGateway
 
         ];
 
-
+        \Log::info(print_r($paymentform->config, true));
         $this->obResponse['htmlform'] = $paymentform->getTransactionFormApi();;
     }
 
