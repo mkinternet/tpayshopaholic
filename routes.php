@@ -23,3 +23,9 @@ Route::post(PaymentGateway::NOTIFICATION_URL, function () {
     $paymentgateway = new PaymentGateway();
     return $paymentgateway->processAnswerRequest();
 });
+
+Route::get('testalert', function () {
+     return \Redirect::to(\Cms\Classes\Page::url('order-complete-page', ['slug' => '123']));
+});
+
+

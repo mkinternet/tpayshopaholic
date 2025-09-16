@@ -11,6 +11,8 @@ class PaymentMethodModel
      */
     public function subscribe($obEvent)
     {
+
+
         PaymentMethod::extend(function ($obElement) {
 
             $obElement->addGatewayClass(PaymentGateway::CODE, PaymentGateway::class);
