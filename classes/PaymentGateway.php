@@ -148,9 +148,9 @@ class PaymentGateway extends AbstractPaymentGateway
     {
         $this->initOrderObject($sOrderKey);
 
-        //return \Redirect::to(\Cms\Classes\Page::url('order-complete-page'));
+        return \Redirect::to(\Cms\Classes\Page::url('order-complete-page'));
 
-        return $this->returnRedirectResponse(self::EVENT_SUCCESS_URL);
+//        return $this->returnRedirectResponse(self::EVENT_SUCCESS_URL);
     }
 
     /**
@@ -161,8 +161,8 @@ class PaymentGateway extends AbstractPaymentGateway
     {
         $this->initOrderObject($sOrderKey);
 
-        return $this->returnRedirectResponse(self::EVENT_FAIL_URL);
-        //return \Redirect::to(\Cms\Classes\Page::url('order-fail-page'));
+        //return $this->returnRedirectResponse(self::EVENT_FAIL_URL);
+        return \Redirect::to(\Cms\Classes\Page::url('order-fail-page'));
     }
 
     /**

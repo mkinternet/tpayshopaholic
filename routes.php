@@ -3,6 +3,9 @@
 use Mkinternet\Tpayshopaholic\Classes\PaymentGateway;
 
 Route::get(PaymentGateway::SUCCESS_URL.'/{slug}', function ($trid) {
+
+
+
     $paymentgateway = new PaymentGateway();
     return $paymentgateway->processSuccessURL($trid);
 });
