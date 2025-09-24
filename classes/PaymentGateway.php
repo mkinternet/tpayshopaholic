@@ -189,8 +189,6 @@ class PaymentGateway extends AbstractPaymentGateway
             $this->getGatewayProperty('resultemail')
         );
 
-
-
         $paymentform->config = [
             'amount' => $this->obOrder->total_price_value,
             'description' => '#' . $this->obOrder->order_number . ' ',
@@ -198,8 +196,8 @@ class PaymentGateway extends AbstractPaymentGateway
             'return_url' => url('/') . self::SUCCESS_URL . '/' . $this->obOrder->secret_key,
             'result_url' => url('/') . self::NOTIFICATION_URL,
             'result_email' => $this->getGatewayProperty('resultemail'),
-            'email' => $this->obOrder->user->email,
-            'name' => $this->obOrder->user->name . ' ' . $this->obOrder->user->last_name,
+            'email' => $this->getOrderProperty('email'),
+            'name' => $this->getOrderProperty('name') . ' ' .  $this->getOrderProperty('last_name'),
             'group' => 150,
             'accept_tos' => 1,
 
